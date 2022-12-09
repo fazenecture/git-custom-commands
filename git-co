@@ -1,6 +1,8 @@
 #!/bin/sh
 
 # Code to Change the Working Branch
+# Author: @fazenecture
+# git co branch_name
 
 # Color Variables
 red='\033[0;31m'
