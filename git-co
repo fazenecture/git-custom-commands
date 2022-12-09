@@ -1,0 +1,59 @@
+#!/bin/sh
+
+# Code to Change the Working Branch
+
+# Color Variables
+red='\033[0;31m'
+green='\033[0;32m'
+yellow='\033[0;33m'
+blue='\033[0;34m'
+magenta='\033[0;35m'
+cyan='\033[0;36m'
+orange='\033[33m'
+# clear the color
+clear='\033[0m'
+
+bold=$(tput bold)
+normal=$(tput sgr0)
+
+branch=$1
+
+currentBranch=$(git symbolic-ref --short -q HEAD)
+
+if [ "$currentBranch" != "$branch" ]
+then
+  if [ ! -z "$currentBranch" ]
+  then
+    if [ ! -z $1 ]
+    then
+      if git checkout $branch;
+      then 
+        echo "📍 Changing Branch..."
+        echo "✅ ${green}Branch Changed${clear} ${bold}$currentBranch -> $branch${clear}"
+        echo "${yellow}Do you want to pull the latest changes? (y/n)${clear}" 
+        read pull
+        if [ $pull == "y"  ]
+          then
+            echo "🚀 Pulling Latest Changes..."
+            if git pull;
+              then
+                echo "✅ ${green}Pulled All The Latest Changes from ${branch}${clear}"
+              else
+                echo "🚫 ${red}Error Pulling the Changes${clear}"
+              fi
+          else
+            echo "🚫 ${red}Pulling Cancelled${clear}"
+          fi
+      else
+        echo "🚫 ${red}Error Changing the Branch${clear}"  
+      fi
+    else
+      echo "🗑 ${red}Branch Name Not Provided${clear}"
+    fi
+  else
+    echo "${red}🚫 Error: You are not in a branch${clear}"
+    exit 1
+  fi
+else
+  echo "🧐 ${red}Cannot Checkout To The Current Branch${clear}"
+fi

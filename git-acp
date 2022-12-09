@@ -1,0 +1,56 @@
+#!/bin/sh
+
+# Code to Add All files, Commit and Push to the Current Branch
+# Author: @fazenecture
+# git acp "Commit Message"
+
+
+# Color Variables
+red='\033[0;31m'
+green='\033[0;32m'
+yellow='\033[0;33m'
+blue='\033[0;34m'
+magenta='\033[0;35m'
+cyan='\033[0;36m'
+# clear the color
+clear='\033[0m'
+
+bold=$(tput bold)
+normal=$(tput sgr0)
+
+message=$1 # First parameter will be the commit message
+currentBranch=$(git symbolic-ref --short -q HEAD)
+
+echo $currentBranch
+echo "${yellow}${bold}This Command will Add All Files, Commit and Push to the Current Branch${normal}${clear}\n"
+
+if [ ! -z "$currentBranch" ]
+then
+  if [ ! -z "$1" ]
+  then
+    echo "🌴 Branch Name - " $currentBranch
+    if git add .;
+    then
+      echo "✅ ${blue}${bold}A${normal}dded All Files${clear}"
+      if git commit -m "$message";
+      then
+        echo "✅ ${cyan}${bold}C${normal}ommited All Files${clear}"
+        if git push origin $currentBranch;
+        then
+          echo "🚀 ${green}${bold}P${normal}ushed All The Changes${clear}"
+        else
+          echo "🚫 ${red}Error Pushing the Changes${clear}"
+        fi
+      else
+        echo "🚫 ${red}Error Commiting the Changes${clear}"
+      fi
+    else 
+      echo "🚫 ${red}Error Adding the Files${clear}"
+    fi
+  else
+    echo "Commit message is not provided"
+  fi
+else
+  echo "${red}🚫 Error: You are not in a branch${clear}"
+  exit 1
+fi
